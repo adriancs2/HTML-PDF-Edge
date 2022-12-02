@@ -1,4 +1,4 @@
-# MS-Edge-HTML-to-PDF
+# HTML to PDF Converter by Using Microsoft Edge
 Convert HTML to PDF by Using Microsoft Edge
 
 Live Demo: [http://html-pdf-edge.adriancs.com/](http://html-pdf-edge.adriancs.com/)
