@@ -9,7 +9,7 @@ PM> NuGet\Install-Package Html-PDF-Edge
 
 ![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot1.png)
 
-Download the source code. Extract and add the C# class file "pdf_edge.cs" into your project.
+Install the NUGET Package, or download the source code. Extract and add the C# class file "pdf_edge.cs" into your project.
 
 To generate PDF and download as attachment:
 ```
