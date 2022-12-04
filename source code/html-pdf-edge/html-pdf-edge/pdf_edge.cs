@@ -41,6 +41,8 @@ namespace html_pdf_edge
 
         static void EdgePublish(string html, TransmitMethod transmitMethod, string filename)
         {
+            // Create a temporary folder for storing the PDF
+
             string folderTemp = HttpContext.Current.Server.MapPath("~/temp/pdf");
 
             if (!Directory.Exists(folderTemp))
@@ -48,23 +50,37 @@ namespace html_pdf_edge
                 Directory.CreateDirectory(folderTemp);
             }
 
-            Random rd = new Random();
+            // Create 2 temporary filename
 
+            Random rd = new Random();
             string randomstr = rd.Next(100000000, int.MaxValue).ToString();
 
             string fileHtml = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.html");
             string filePdf = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.pdf");
 
+            // Create the HTML file
+
             File.WriteAllText(fileHtml, html);
+
+            // Obtain the URL of the HTML file
 
             var r = HttpContext.Current.Request.Url;
             string url = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{randomstr}.html";
 
+            // Create the PDF file
+
             GeneratePdf(url, filePdf);
+
+            // Obtain the file size
 
             FileInfo fi = new FileInfo(filePdf);
             string filelength = fi.Length.ToString();
+
+            // Load the file into memory (byte array)
+
             byte[] ba = File.ReadAllBytes(filePdf);
+
+            // Delete the 2 temp files from server
 
             try
             {
@@ -77,6 +93,8 @@ namespace html_pdf_edge
                 File.Delete(fileHtml);
             }
             catch { }
+
+            // Transmit the PDF for download
 
             HttpContext.Current.Response.Clear();
 
