@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "html-pdf-edge", "html-pdf-edge\html-pdf-edge.csproj", "{6F6385BF-AD09-40D7-AABD-304D761EC9FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "html-pdf-edge-class", "html-pdf-edge-class\html-pdf-edge-class.csproj", "{B9F1FB43-6FE3-4811-A409-BFED153D88C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6F6385BF-AD09-40D7-AABD-304D761EC9FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F6385BF-AD09-40D7-AABD-304D761EC9FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F6385BF-AD09-40D7-AABD-304D761EC9FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9F1FB43-6FE3-4811-A409-BFED153D88C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9F1FB43-6FE3-4811-A409-BFED153D88C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9F1FB43-6FE3-4811-A409-BFED153D88C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9F1FB43-6FE3-4811-A409-BFED153D88C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

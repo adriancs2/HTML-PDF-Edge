@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Web;
 
-namespace html_pdf_edge
+namespace System
 {
     public class pdf_edge
     {
