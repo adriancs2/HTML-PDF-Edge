@@ -61,7 +61,7 @@ There are a few necessary CSS that you have to include in the HTML page in order
 ```
 The purpose of doing this is to hide the header and footer:
 
-![](https://github.com/adriancs2/HTML-PDF-Edge/blob/main/wiki/screenshot4.png?raw=true)
+![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot4.png)
 
 **2. Set paper size**
 
