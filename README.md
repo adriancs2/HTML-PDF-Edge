@@ -222,3 +222,112 @@ In stead, include the root path like this:
 
 </html>
 ```
+## The Code Behind
+ Here I'll explain a bit how the C# class works in behind.
+
+As mentioned, the real work is done within the C# class of "pdf_edge.cs".
+
+Start off by adding 2 using statements:
+
+```
+using System.Diagnostics;
+using System.IO;
+```
+Here is the main method that runs Microsoft Edge for converting HTML into PDF file:
+
+```
+public static void GeneratePdf(string url, string filePath)
+{
+    using (var p = new Process())
+    {
+        p.StartInfo.FileName = "msedge";
+        p.StartInfo.Arguments = $"--headless --disable-gpu 
+            --run-all-compositor-stages-before-draw
+            --print-to-pdf=\"{filePath}\" {url}";
+        p.Start();
+        p.WaitForExit();
+    }
+}
+```
+The enum for defining the Transmit Method:
+```
+public enum TransmitMethod
+{
+    None,
+    Attachment,
+    Inline
+}
+```
+Here is the code for preparing the URL for Microsoft Edge to generate the PDF:
+```
+static void EdgePublish(string html, TransmitMethod transmitMethod, string filename)
+{
+    // Create a temporary folder for storing the PDF
+
+    string folderTemp = HttpContext.Current.Server.MapPath("~/temp/pdf");
+
+    if (!Directory.Exists(folderTemp))
+    {
+        Directory.CreateDirectory(folderTemp);
+    }
+
+    // Create 2 temporary filename
+
+    Random rd = new Random();
+    string randomstr = rd.Next(100000000, int.MaxValue).ToString();
+            
+    string fileHtml = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.html");
+    string filePdf = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.pdf");
+
+    // Create the HTML file
+
+    File.WriteAllText(fileHtml, html);
+
+    // Obtain the URL of the HTML file
+
+    var r = HttpContext.Current.Request.Url;
+    string url = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{randomstr}.html";
+
+    // Create the PDF file
+
+    GeneratePdf(url, filePdf);
+
+    // Obtain the file size
+            
+    FileInfo fi = new FileInfo(filePdf);
+    string filelength = fi.Length.ToString();
+
+    // Load the file into memory (byte array)
+
+    byte[] ba = File.ReadAllBytes(filePdf);
+
+    // Delete the 2 temp files from server
+
+    try
+    {
+        File.Delete(filePdf);
+    }
+    catch { }
+
+    try
+    {
+        File.Delete(fileHtml);
+    }
+    catch { }
+
+    // Transmit the PDF for download
+
+    HttpContext.Current.Response.Clear();
+
+    if (transmitMethod == TransmitMethod.Inline)
+        HttpContext.Current.Response.AddHeader("Content-Disposition", "inline");
+    else if (transmitMethod == TransmitMethod.Attachment)
+        HttpContext.Current.Response.AddHeader("Content-Disposition", $"attachment; filename=\"{filename}\"");
+
+    HttpContext.Current.Response.ContentType = "application/pdf";
+    HttpContext.Current.Response.AddHeader("Content-Length", filelength);
+    HttpContext.Current.Response.BinaryWrite(ba);
+    HttpContext.Current.Response.End();
+}
+
+```
