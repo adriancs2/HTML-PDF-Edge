@@ -3,6 +3,10 @@ Convert HTML to PDF by Using Microsoft Edge
 
 Live Demo: [http://html-pdf-edge.adriancs.com/](http://html-pdf-edge.adriancs.com/)
 
+Available at Nuget: [https://www.nuget.org/packages/Html-PDF-Edge](https://www.nuget.org/packages/Html-PDF-Edge)
+
+PM> NuGet\Install-Package Html-PDF-Edge
+
 ![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot1.png)
 
 Download the source code. Extract and add the C# class file "pdf_edge.cs" into your project.
