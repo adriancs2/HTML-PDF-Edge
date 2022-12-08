@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace html_pdf_edge
+namespace System
 {
     public partial class Default : System.Web.UI.Page
     {

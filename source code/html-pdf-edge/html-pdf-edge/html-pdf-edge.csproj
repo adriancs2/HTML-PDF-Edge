@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>html_pdf_edge_web</RootNamespace>
-    <AssemblyName>html-pdf-edge-web</AssemblyName>
+    <RootNamespace>System</RootNamespace>
+    <AssemblyName>html-pdf-edge-demo</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -84,8 +84,17 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -95,7 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\html-pdf-edge-class\html-pdf-edge-class.csproj">
-      <Project>{b9f1fb43-6fe3-4811-a409-bfed153d88c4}</Project>
+      <Project>{6185c71e-8e36-4805-af9c-9d14a0f89a58}</Project>
       <Name>html-pdf-edge-class</Name>
     </ProjectReference>
   </ItemGroup>

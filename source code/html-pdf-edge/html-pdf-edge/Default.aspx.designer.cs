@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace html_pdf_edge
+namespace System
 {
 
 
