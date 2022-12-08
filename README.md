@@ -43,19 +43,7 @@ msedge --headless --disable-gpu --run-all-compositor-stages-before-draw
 http://localhost:50964/temp/pdf/2059060194.html
 ```
 
-With this, I have written a simple C# class library that automate this process. Include the file "pdf_edge.cs" into your project, or install the NUGET package.
-
-To generate PDF and download as attachment:
-
-```
-pdf_edge.GeneratePdfAttachment(html, "file.pdf");
-```
-
-To generate PDF and display in browser:
-
-```
-pdf_edge.GeneratePdfInline(html);
-```
+With this, I have written a simple C# class library that automate this process.
 
 Here is the C# coding that works in behind:
 
