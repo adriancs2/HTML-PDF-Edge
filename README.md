@@ -1,9 +1,10 @@
 # Convert HTML to PDF by Using Microsoft Edge
+
 Convert HTML to PDF by Using Microsoft Edge
 
 Live Demo: [http://html-pdf-edge.adriancs.com/](http://html-pdf-edge.adriancs.com/)
 
-Available at Nuget: [https://www.nuget.org/packages/Html-PDF-Edge](https://www.nuget.org/packages/Html-PDF-Edge)
+Nuget: [https://www.nuget.org/packages/Html-PDF-Edge](https://www.nuget.org/packages/Html-PDF-Edge)
 
 PM> NuGet\Install-Package Html-PDF-Edge
 
