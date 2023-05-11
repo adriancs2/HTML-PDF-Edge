@@ -61,6 +61,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="apiGetPDF.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Edge-logo.png" />
     <Content Include="loading.gif" />
@@ -76,6 +77,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="apiGetPDF.aspx.cs">
+      <DependentUpon>apiGetPDF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="apiGetPDF.aspx.designer.cs">
+      <DependentUpon>apiGetPDF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

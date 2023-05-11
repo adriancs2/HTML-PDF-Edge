@@ -7,10 +7,9 @@
 
     <title></title>
     <style type="text/css">
-
         @import url('https://fonts.googleapis.com/css2?family=Bad+Script&display=swap');
 
-        body {
+        body, a, input {
             font-size: 12pt;
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -28,6 +27,29 @@
             max-width: 1000px;
             margin: auto;
         }
+
+        .divButtons a, input[type=submit] {
+            background: #3b59ad;
+            color: white;
+            display: inline-block;
+            border-radius: 6px;
+            text-decoration: none;
+            font-style: normal;
+            padding: 5px 10px;
+            cursor: pointer;
+            outline: none;
+            border: none;
+        }
+
+            .divButtons a:hover, input[type=submit]:hover {
+                color: #ffec55;
+                background: #203a85;
+                text-decoration: none;
+                font-style: normal;
+                position: relative;
+                top: 1px;
+                bottom: 1px;
+            }
 
         textarea {
             font-family: "Cascadia Mono", Consolas, "Courier New", Courier, monospace;
@@ -59,18 +81,6 @@
         }
     </style>
 
-    <script type="text/javascript">
-        function showLoading() {
-            let d = document.getElementById("divLoading");
-            d.style.display = "block";
-            setTimeout(hideLoading, 2000);
-        }
-
-        function hideLoading() {
-            let d = document.getElementById("divLoading");
-            d.style.display = "none";
-        }
-    </script>
 </head>
 <body>
 
@@ -89,27 +99,37 @@
         <br />
 
         <form id="form1" runat="server">
-            <asp:Button ID="btGeneratePdfAttachment" runat="server" Text="Generate PDF (download as attachment)" OnClick="btGeneratePdfAttachment_Click" OnClientClick="showLoading();" />
-            <asp:Button ID="btGeneratePdfInline" runat="server" Text="Generate PDF (display as inline)" OnClick="btGeneratePdfInline_Click" OnClientClick="showLoading();" />
-            <asp:Button ID="btPreview" runat="server" Text="Preview HTML Rendering" OnClick="btPreview_Click" /><br />
-            <br />
-            Load Sample HTML:
-        <asp:Button ID="btLoadBasic" runat="server" Text="Basic" OnClick="btLoadBasic_Click" />
-            <asp:Button ID="btLoadInvoice1" runat="server" Text="Invoice 1" OnClick="btLoadInvoice1_Click" />
-            <asp:Button ID="btLoadInvoice2" runat="server" Text="Invoice 2" OnClick="btLoadInvoice2_Click" />
-            <asp:Button ID="btLoadInvoice3" runat="server" Text="Invoice 3" OnClick="btLoadInvoice3_Click" />
-            <asp:Button ID="btLoadInvoice4" runat="server" Text="Invoice 4" OnClick="btLoadInvoice4_Click" />
-            <asp:Button ID="btLoadForm1" runat="server" Text="Form 1" OnClick="btLoadForm1_Click" /><br />
+
+            <div class="divButtons">
+                Generate PDF:
+                <a href="#" onclick="generatePDF_Ajax(); return false;">Using AJAX</a>
+                <a href="#" onclick="generatePDF_FetchApi(); return false;">Using Fetch API</a>
+                <asp:Button ID="btGeneratePdfAttachment" runat="server" Text="Postback (attachment)" OnClick="btGeneratePdfAttachment_Click" OnClientClick="showLoading();" />
+                <asp:Button ID="btGeneratePdfInline" runat="server" Text="Postback (inline)" OnClick="btGeneratePdfInline_Click" OnClientClick="showLoading();" />
+                <asp:Button ID="btPreview" runat="server" Text="Preview HTML Rendering" OnClick="btPreview_Click" /><br />
+            </div>
+
+            <hr />
+
+            <div class="divButtons">
+                Load Sample HTML:
+                <a href="#" onclick="loadDoc('basic'); return false;">basic</a>
+                <a href="#" onclick="loadDoc('form1'); return false;">form1</a>
+                <a href="#" onclick="loadDoc('invoice1'); return false;">invoice1</a>
+                <a href="#" onclick="loadDoc('invoice2'); return false;">invoice2</a>
+                <a href="#" onclick="loadDoc('invoice3'); return false;">invoice3</a>
+                <a href="#" onclick="loadDoc('invoice4'); return false;">invoice4</a>
+            </div>
 
             <br />
 
-            Acknowledgement of The Origin of HTML Sample, Special Thanks to: <a href="https://htmlpdfapi.com/blog/free_html5_invoice_templates">htmlpdfapi.com</a> and Document Templates provided by Microsoft Word 2021.
+            Special Thanks to: <a href="https://htmlpdfapi.com/blog/free_html5_invoice_templates">htmlpdfapi.com</a> and Document Templates provided by Microsoft Word 2021 for sample HTML.
 
         <br />
             <br />
 
             Edit HTML Here:
-        <asp:TextBox ID="txt" runat="server" TextMode="MultiLine" spellcheck="false" ValidateRequestMode="Disabled"></asp:TextBox>
+            <asp:TextBox ID="txt" runat="server" TextMode="MultiLine" spellcheck="false"></asp:TextBox>
         </form>
 
 
@@ -120,5 +140,92 @@
         </div>
 
     </div>
+
+    <script type="text/javascript">
+
+        function generatePDF_Ajax() {
+
+            showLoading();
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/apiGetPDF.aspx'); // URL of server-side script that generates PDF
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.responseType = 'arraybuffer'; // receive PDF file as binary data
+
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    // create a blob URL from the binary data
+                    var blob = new Blob([this.response], { type: 'application/pdf' });
+                    var url = URL.createObjectURL(blob);
+                    // redirect to the PDF file
+                    window.location.href = url;
+                } else {
+                    console.log('Error generating PDF: ' + this.statusText);
+                }
+            };
+
+            xhr.onerror = function () {
+                console.log('Error generating PDF: ' + this.statusText);
+            };
+
+            xhr.send('text=' + encodeURIComponent(document.getElementById('txt').value)); // data to send to server-side script
+        }
+
+        function generatePDF_FetchApi() {
+
+            showLoading();
+
+            fetch('/apiGetPDF.aspx', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'text=' + encodeURIComponent(document.getElementById('txt').value)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.arrayBuffer();
+                    } else {
+                        throw new Error('Error generating PDF: ' + response.statusText);
+                    }
+                })
+                .then(data => {
+                    // create a blob URL from the binary data
+                    var blob = new Blob([data], { type: 'application/pdf' });
+                    var url = URL.createObjectURL(blob);
+                    // redirect to the PDF file
+                    window.location.href = url;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+
+        function loadDoc(filename) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', `/sample_html/${filename}.html`, true);
+            xhr.responseType = 'text';
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var htmlText = xhr.responseText;
+                    document.getElementById('txt').value = htmlText;
+                }
+            };
+            xhr.send();
+        }
+
+        function showLoading() {
+            let d = document.getElementById("divLoading");
+            d.style.display = "block";
+            setTimeout(hideLoading, 2000);
+        }
+
+        function hideLoading() {
+            let d = document.getElementById("divLoading");
+            d.style.display = "none";
+        }
+
+        loadDoc("basic");
+    </script>
 </body>
 </html>

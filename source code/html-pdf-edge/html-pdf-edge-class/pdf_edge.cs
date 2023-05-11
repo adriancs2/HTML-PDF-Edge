@@ -1,45 +1,120 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Web;
+using static System.PDF;
 
 namespace System
 {
-    public class pdf_edge
+    public class PDF
     {
         public enum TransmitMethod
         {
             None,
             Attachment,
-            Inline
+            Inline,
+            Redirect
         }
 
-        public static void GeneratePdf(string url, string filePath)
+        public static void GeneratePdf(string urlHtml, string filePathPDF)
         {
+            if (File.Exists(filePathPDF))
+            {
+                try
+                {
+                    File.Delete(filePathPDF);
+                }
+                catch { }
+            }
+
             using (var p = new Process())
             {
                 p.StartInfo.FileName = "msedge";
-                p.StartInfo.Arguments = $"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=\"{filePath}\" {url}";
+                p.StartInfo.Arguments = $@"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=""{filePathPDF}"" {urlHtml}";
                 p.Start();
                 p.WaitForExit();
             }
 
-            GC.Collect();
+            while (!File.Exists(filePathPDF))
+            {
+                System.Threading.Thread.Sleep(500);
+            }
         }
 
-        public static void GeneratePdfInline(string html)
+        static void Publish(TransmitMethod transmitMethod, string filenamePdf, string filePdfTemp)
         {
-            EdgePublish(html, TransmitMethod.Inline, null);
+            if (transmitMethod == TransmitMethod.None)
+            {
+
+            }
+            else if (transmitMethod == TransmitMethod.Attachment)
+            {
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.ContentType = "application/pdf";
+                string encodedFilename = HttpUtility.UrlEncode(filenamePdf);
+                HttpContext.Current.Response.AddHeader("Content-Disposition", $"attachment; filename*=UTF-8''{encodedFilename}");
+                HttpContext.Current.Response.AddHeader("Content-Length", new FileInfo(filePdfTemp).Length.ToString());
+                byte[] ba = File.ReadAllBytes(filePdfTemp);
+                try
+                {
+                    File.Delete(filePdfTemp);
+                }
+                catch { }
+                HttpContext.Current.Response.BinaryWrite(ba);
+                HttpContext.Current.Response.End();
+            }
+            else if (transmitMethod == TransmitMethod.Inline)
+            {
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.ContentType = "application/pdf";
+                string encodedFilename = HttpUtility.UrlEncode(filenamePdf);
+                HttpContext.Current.Response.AddHeader("Content-Disposition", $"inline; filename*=UTF-8''{encodedFilename}");
+                HttpContext.Current.Response.AddHeader("Content-Length", new FileInfo(filePdfTemp).Length.ToString());
+                byte[] ba = File.ReadAllBytes(filePdfTemp);
+                try
+                {
+                    File.Delete(filePdfTemp);
+                }
+                catch { }
+                HttpContext.Current.Response.BinaryWrite(ba);
+                HttpContext.Current.Response.End();
+            }
+            else if (transmitMethod == TransmitMethod.Redirect)
+            {
+                HttpContext.Current.Response.Redirect($"~/temp/pdf/{filenamePdf}", true);
+            }
         }
 
-        public static void GeneratePdfAttachment(string html, string filenameWithPdf)
+        static void DeleteOldFiles(string filenameToKeep, string folderTemp)
         {
-            EdgePublish(html, TransmitMethod.Attachment, filenameWithPdf);
+            string[] oldFiles = Directory.GetFiles(folderTemp);
+
+            DateTime dateexpiry = DateTime.Now.AddMinutes(-30);
+
+            foreach (var file in oldFiles)
+            {
+                FileInfo fi = new FileInfo(file);
+                if (fi.CreationTime < dateexpiry)
+                {
+                    if (file.EndsWith($"{filenameToKeep}"))
+                        continue;
+
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch { }
+                }
+            }
         }
 
-        static void EdgePublish(string html, TransmitMethod transmitMethod, string filename)
+        public static void PublishUrl(string url, string filenamePdf, TransmitMethod transmitMethod)
         {
-            // Create a temporary folder for storing the PDF
+            if (!filenamePdf.ToLower().EndsWith(".pdf"))
+            {
+                filenamePdf = filenamePdf + ".pdf";
+            }
 
             string folderTemp = HttpContext.Current.Server.MapPath("~/temp/pdf");
 
@@ -48,63 +123,64 @@ namespace System
                 Directory.CreateDirectory(folderTemp);
             }
 
-            // Create 2 temporary filename
+            string filePdfTemp = HttpContext.Current.Server.MapPath($"~/temp/pdf/{filenamePdf}");
 
-            Random rd = new Random();
-            string randomstr = rd.Next(100000000, int.MaxValue).ToString();
+            GeneratePdf(url, filePdfTemp);
 
-            string fileHtml = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.html");
-            string filePdf = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.pdf");
+            DeleteOldFiles(filenamePdf, folderTemp);
 
-            // Create the HTML file
+            Publish(transmitMethod, filenamePdf, filePdfTemp);
+        }
 
-            File.WriteAllText(fileHtml, html);
+        public static void PublishHtml(string htmlContent)
+        {
+            PublishHtml(htmlContent, "", TransmitMethod.Inline);
+        }
 
-            // Obtain the URL of the HTML file
+        public static void PublishHtml(string htmlContent, string filenamePdf)
+        {
+            PublishHtml(htmlContent, filenamePdf, TransmitMethod.Attachment);
+        }
 
-            var r = HttpContext.Current.Request.Url;
-            string url = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{randomstr}.html";
+        public static void PublishHtml(string htmlContent, string filenamePdf, TransmitMethod transmitMethod)
+        {
+            if (filenamePdf == null || filenamePdf.Length == 0)
+            {
+                filenamePdf = DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
+            }
 
-            // Create the PDF file
+            if (!filenamePdf.ToLower().EndsWith(".pdf"))
+            {
+                filenamePdf = filenamePdf + ".pdf";
+            }
 
-            GeneratePdf(url, filePdf);
+            string folderTemp = HttpContext.Current.Server.MapPath("~/temp/pdf");
 
-            // Obtain the file size
+            if (!Directory.Exists(folderTemp))
+            {
+                Directory.CreateDirectory(folderTemp);
+            }
 
-            FileInfo fi = new FileInfo(filePdf);
-            string filelength = fi.Length.ToString();
+            string fileHtmlTemp = HttpContext.Current.Server.MapPath($"~/temp/pdf/{filenamePdf}.html");
+            string filePdfTemp = HttpContext.Current.Server.MapPath($"~/temp/pdf/{filenamePdf}");
 
-            // Load the file into memory (byte array)
+            File.WriteAllText(fileHtmlTemp, htmlContent);
 
-            byte[] ba = File.ReadAllBytes(filePdf);
+            Uri r = HttpContext.Current.Request.Url;
 
-            // Delete the 2 temp files from server
+            string urlHtml = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{filenamePdf}.html";
+
+            GeneratePdf(urlHtml, filePdfTemp);
 
             try
             {
-                File.Delete(filePdf);
+                File.Delete(fileHtmlTemp);
             }
             catch { }
 
-            try
-            {
-                File.Delete(fileHtml);
-            }
-            catch { }
+            DeleteOldFiles(filenamePdf, folderTemp);
 
-            // Transmit the PDF for download
-
-            HttpContext.Current.Response.Clear();
-
-            if (transmitMethod == TransmitMethod.Inline)
-                HttpContext.Current.Response.AddHeader("Content-Disposition", "inline");
-            else if (transmitMethod == TransmitMethod.Attachment)
-                HttpContext.Current.Response.AddHeader("Content-Disposition", $"attachment; filename=\"{filename}\"");
-
-            HttpContext.Current.Response.ContentType = "application/pdf";
-            HttpContext.Current.Response.AddHeader("Content-Length", filelength);
-            HttpContext.Current.Response.BinaryWrite(ba);
-            HttpContext.Current.Response.End();
+            Publish(transmitMethod, filenamePdf, filePdfTemp);
         }
     }
 }

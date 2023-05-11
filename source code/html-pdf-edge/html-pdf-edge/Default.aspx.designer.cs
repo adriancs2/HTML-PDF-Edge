@@ -51,60 +51,6 @@ namespace System
         protected global::System.Web.UI.WebControls.Button btPreview;
 
         /// <summary>
-        /// btLoadBasic control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btLoadBasic;
-
-        /// <summary>
-        /// btLoadInvoice1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btLoadInvoice1;
-
-        /// <summary>
-        /// btLoadInvoice2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btLoadInvoice2;
-
-        /// <summary>
-        /// btLoadInvoice3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btLoadInvoice3;
-
-        /// <summary>
-        /// btLoadInvoice4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btLoadInvoice4;
-
-        /// <summary>
-        /// btLoadForm1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btLoadForm1;
-
-        /// <summary>
         /// txt control.
         /// </summary>
         /// <remarks>
