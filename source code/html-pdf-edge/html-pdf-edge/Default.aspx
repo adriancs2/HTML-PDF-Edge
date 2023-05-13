@@ -8,6 +8,7 @@
     <title></title>
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css2?family=Bad+Script&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap');
 
         body, a, input {
             font-size: 12pt;
@@ -51,15 +52,60 @@
                 bottom: 1px;
             }
 
-        textarea {
-            font-family: "Cascadia Mono", Consolas, "Courier New", Courier, monospace;
-            font-weight: bold;
-            font-size: 10pt;
-            color: #5b5b5b;
+        #divCodeWrapper {
             height: calc(100vh - 320px);
             width: 95%;
-            margin-top: 10px;
-            padding: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #a5a5a5;
+            border-radius: 8px;
+        }
+
+        #preCode {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            background: #1b1b1b;
+            border-radius: 8px;
+        }
+
+            #preCode code {
+                height: calc(100% - 40px);
+                width: calc(100% - 20px);
+                padding: 10px 10px 30px 10px;
+                font-family: "Roboto Mono", "Cascadia Mono", "Consolas", "Courier New", Courier, monospace;
+                font-weight: 500;
+                font-size: 10pt;
+                line-height: 150%;
+                overflow-y: scroll;
+                overflow-x: scroll;
+                border-radius: 8px;
+            }
+
+        textarea {
+            font-family: "Roboto Mono", "Cascadia Mono", "Consolas", "Courier New", Courier, monospace;
+            font-weight: 500;
+            font-size: 10pt;
+            line-height: 150%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: calc(100% - 40px);
+            width: calc(100% - 20px);
+            padding: 10px 10px 30px 10px;
+            z-index: 2;
+            overflow-x: scroll;
+            overflow-y: scroll;
+            white-space: nowrap;
+            background-color: rgba(0,0,0,0);
+            color: rgba(255,255,255,0);
+            caret-color: white;
+            border-radius: 8px;
         }
 
         .divLoading {
@@ -80,6 +126,9 @@
             font-weight: bold;
         }
     </style>
+
+    <link href="vs2015.min.css" rel="stylesheet" type="text/css" />
+    <script src="highlight.min.js"></script>
 
 </head>
 <body>
@@ -129,7 +178,10 @@
             <br />
 
             Edit HTML Here:
-            <asp:TextBox ID="txt" runat="server" TextMode="MultiLine" spellcheck="false"></asp:TextBox>
+            <div id="divCodeWrapper">
+                <pre id="preCode"><code id="codeBlock"></code></pre>
+                <asp:TextBox ID="txt" runat="server" TextMode="MultiLine" Wrap="false" spellcheck="false" oninput="updateCode();"></asp:TextBox>
+            </div>
         </form>
 
 
@@ -141,7 +193,12 @@
 
     </div>
 
+
+
     <script type="text/javascript">
+
+        var txt = document.getElementById('txt');
+        var codeBlock = document.getElementById("codeBlock");
 
         function generatePDF_Ajax() {
 
@@ -168,7 +225,7 @@
                 console.log('Error generating PDF: ' + this.statusText);
             };
 
-            xhr.send('text=' + encodeURIComponent(document.getElementById('txt').value)); // data to send to server-side script
+            xhr.send('text=' + encodeURIComponent(txt.value)); // data to send to server-side script
         }
 
         function generatePDF_FetchApi() {
@@ -180,7 +237,7 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: 'text=' + encodeURIComponent(document.getElementById('txt').value)
+                body: 'text=' + encodeURIComponent(txt.value)
             })
                 .then(response => {
                     if (response.ok) {
@@ -208,7 +265,7 @@
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     var htmlText = xhr.responseText;
-                    document.getElementById('txt').value = htmlText;
+                    txt.value = htmlText;
                 }
             };
             xhr.send();
@@ -225,7 +282,76 @@
             d.style.display = "none";
         }
 
+        function updateCode() {
+            let text = txt.value;
+            text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            codeBlock.innerHTML = text;
+            highlightJS();
+        }
+
+        function highlightJS() {
+            hljs.highlightAll();
+            //document.querySelectorAll('pre code').forEach((el) => {
+            //    hljs.highlightElement(el);
+            //});
+        }
+
+
+
+
+        txt.addEventListener('keydown', function (event) {
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const currentPos = this.selectionStart;
+                const currentLine = this.value.substr(0, currentPos).split('\n').pop();
+                const indent = currentLine.match(/^\s*/)[0];
+                const value = this.value;
+                this.value = value.substring(0, currentPos) + '\n' + indent + value.substring(this.selectionEnd);
+                this.selectionStart = this.selectionEnd = currentPos + indent.length + 1;
+
+                updateCode();
+            }
+
+            if (event.key === "Tab" && !event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
+                event.preventDefault();
+                const start = txt.selectionStart;
+                const end = txt.selectionEnd;
+                const lines = txt.value.substring(start, end).split("\n");
+                const indentedLines = lines.map((line) => "    " + line); // add 4 spaces to the beginning of each line
+                const indentedText = indentedLines.join("\n");
+                txt.value = txt.value.substring(0, start) + indentedText + txt.value.substring(end);
+                txt.setSelectionRange(start, start + indentedText.length);
+
+                updateCode();
+            }
+
+            if (event.key === "Tab" && event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
+                event.preventDefault();
+                const start = txt.selectionStart;
+                const end = txt.selectionEnd;
+                const lines = txt.value.substring(start, end).split("\n");
+                const unindentedLines = lines.map((line) => line.replace(/^ {4}/, "")); // remove 4 spaces from the beginning of each line
+                const unindentedText = unindentedLines.join("\n");
+                txt.value = txt.value.substring(0, start) + unindentedText + txt.value.substring(end);
+                txt.setSelectionRange(start, start + unindentedText.length);
+
+                updateCode();
+            }
+
+            //codeBlock.scrollTop = txt.scrollTop;
+            //codeBlock.scrollLeft = txt.scrollLeft;
+        });
+
+        txt.addEventListener("scroll", () => {
+            codeBlock.scrollTop = txt.scrollTop;
+            codeBlock.scrollLeft = txt.scrollLeft;
+        });
+
+
         loadDoc("basic");
+
+        setTimeout(updateCode, 500);
     </script>
 </body>
 </html>

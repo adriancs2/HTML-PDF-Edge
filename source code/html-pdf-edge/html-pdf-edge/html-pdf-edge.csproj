@@ -64,6 +64,7 @@
     <Content Include="apiGetPDF.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Edge-logo.png" />
+    <Content Include="highlight.min.js" />
     <Content Include="loading.gif" />
     <Content Include="pdf.jpg" />
     <Content Include="sample_html\basic.html" />
@@ -74,6 +75,7 @@
     <Content Include="sample_html\invoice4.html" />
     <Content Include="sample_html\logo_invoice2.png" />
     <Content Include="sample_html\logo_invoice3.png" />
+    <Content Include="vs2015.min.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
