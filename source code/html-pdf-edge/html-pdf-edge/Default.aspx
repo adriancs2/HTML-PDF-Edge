@@ -291,9 +291,6 @@
 
         function highlightJS() {
             hljs.highlightAll();
-            //document.querySelectorAll('pre code').forEach((el) => {
-            //    hljs.highlightElement(el);
-            //});
         }
 
 
@@ -313,7 +310,7 @@
                 updateCode();
             }
 
-            if (event.key === "Tab" && !event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
+            else if (event.key === "Tab" && !event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
                 event.preventDefault();
                 const start = txt.selectionStart;
                 const end = txt.selectionEnd;
@@ -326,7 +323,7 @@
                 updateCode();
             }
 
-            if (event.key === "Tab" && event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
+            else if (event.key === "Tab" && event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
                 event.preventDefault();
                 const start = txt.selectionStart;
                 const end = txt.selectionEnd;
