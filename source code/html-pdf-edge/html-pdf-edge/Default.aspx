@@ -266,6 +266,7 @@
                 if (xhr.status === 200) {
                     var htmlText = xhr.responseText;
                     txt.value = htmlText;
+                    updateCode();
                 }
             };
             xhr.send();
