@@ -445,14 +445,20 @@
             // [Enter] key pressed detected
             if (e.key === 'Enter') {
 
-                // suspend default behaviour of [Enter] key press
+                // Prevent the default behavior (new line)
                 e.preventDefault();
-                const currentPos = this.selectionStart;
-                const currentLine = this.value.substr(0, currentPos).split('\n').pop();
-                const indent = currentLine.match(/^\s*/)[0];
-                const value = this.value;
-                this.value = value.substring(0, currentPos) + '\n' + indent + value.substring(this.selectionEnd);
-                this.selectionStart = this.selectionEnd = currentPos + indent.length + 1;
+
+                // Get the cursor position
+                var cursorPos = textarea1.selectionStart;
+
+                // Get the previous line
+                var prevLine = textarea1.value.substring(0, cursorPos).split('\n').slice(-1)[0];
+
+                // Get the indentation of the previous line
+                var indent = prevLine.match(/^\s*/)[0];
+
+                // Add a new line with the same indentation
+                textarea1.setRangeText('\n' + indent, cursorPos, cursorPos, 'end');
 
                 // copy the code from textarea to code block      
                 updateCode();
