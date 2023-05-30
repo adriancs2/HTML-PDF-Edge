@@ -75,7 +75,8 @@
     <h1>Syntax Highlightning for Textarea</h1>
 
     <p>
-        <string>Using Textarea as Code Editor</string> | 
+        <string>Using Textarea as Code Editor</string>
+        | 
         Article: 
         <a href="https://adriancs.com/html-css-js/1015/syntax-highlightning-in-textarea-html/">adriancs.com</a>,  
         <a href="https://www.codeproject.com/Articles/5361561/Syntax-Highlightning-for-Textarea-HTML">codeproject.com</a>
@@ -83,7 +84,7 @@
     </p>
 
     <p>
-         Addon Functions: [Enter] will maintain indentation. [Tab] / [Shift]+[Tab] will increase/decrease indentation (support multiline).
+        Addon Functions: [Enter] will maintain indentation. [Tab] / [Shift]+[Tab] will increase/decrease indentation (support multiline).
     </p>
 
 
@@ -530,9 +531,8 @@
             }
 
 
-            // [Tab]/[Shift] presence and highlight detected
-            // multiline indentation
-            if (e.key == 'Tab') {
+            // [Tab] key pressed and range selection detected
+            if (e.key == 'Tab' & textarea1.selectionStart != textarea1.selectionEnd) {
                 e.preventDefault();
 
                 // split the textarea content into lines
@@ -542,22 +542,37 @@
                 var startPos = this.value.substring(0, this.selectionStart).split('\n').length - 1;
                 var endPos = this.value.substring(0, this.selectionEnd).split('\n').length - 1;
 
+                // calculating total white spaces are removed
+                // these values will be used for adjusting new cursor position
                 var spacesRemovedFirstLine = 0;
                 var spacesRemoved = 0;
 
-                // check shift key was pressed (this means we're un-indenting)
+                // [Shift] key was pressed (this means we're un-indenting)
                 if (e.shiftKey) {
+
                     // iterate over all lines
                     for (var i = startPos; i <= endPos; i++) {
-                        // remove up to four spaces from the start of the line
+
+                        // /^ = from the start of the line,
+                        // {1,4} = remove in between 1 to 4 white spaces that may existed
                         lines[i] = lines[i].replace(/^ {1,4}/, function (match) {
+
+                            // "match" is a string (white space) extracted
+
+                            // obtaining total white spaces removed
+
+                            // total white space removed at first line
                             if (i == startPos)
                                 spacesRemovedFirstLine = match.length;
+
+                            // total white space removed overall
                             spacesRemoved += match.length;
+
                             return '';
                         });
                     }
                 }
+
                 // no shift key, so we're indenting
                 else {
                     // iterate over all lines
@@ -574,8 +589,11 @@
                 // put the modified lines back into the textarea
                 this.value = lines.join('\n');
 
-                this.selectionStart = e.shiftKey ? start - spacesRemovedFirstLine : start + 4;
-                this.selectionEnd = e.shiftKey ? end - spacesRemoved : end + 4 * (endPos - startPos + 1);
+                this.selectionStart = e.shiftKey ?
+                    start - spacesRemovedFirstLine : start + 4;
+
+                this.selectionEnd = e.shiftKey ?
+                    end - spacesRemoved : end + 4 * (endPos - startPos + 1);
 
                 // copy the code from textarea to code block      
                 updateCode();
