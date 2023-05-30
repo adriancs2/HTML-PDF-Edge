@@ -18,18 +18,18 @@ namespace System
         protected void btPreview_Click(object sender, EventArgs e)
         {
             Response.Clear();
-            Response.Write(txt.Text);
+            Response.Write(textarea1.Text);
             Response.End();
         }
 
         protected void btGeneratePdfAttachment_Click(object sender, EventArgs e)
         {
-            PDF.PublishHtml(txt.Text, "file.pdf");
+            PDF.PublishHtml(textarea1.Text, "file.pdf");
         }
 
         protected void btGeneratePdfInline_Click(object sender, EventArgs e)
         {
-            PDF.PublishHtml(txt.Text, null, PDF.TransmitMethod.Inline);
+            PDF.PublishHtml(textarea1.Text, null, PDF.TransmitMethod.Inline);
         }
     }
 }

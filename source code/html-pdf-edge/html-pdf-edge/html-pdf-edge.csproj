@@ -67,8 +67,10 @@
     <Content Include="highlight.min.js" />
     <Content Include="loading.gif" />
     <Content Include="pdf.jpg" />
+    <Content Include="sampledoc.html" />
     <Content Include="sample_html\basic.html" />
     <Content Include="sample_html\form1.html" />
+    <Content Include="sample_html\immenseart1.html" />
     <Content Include="sample_html\invoice1.html" />
     <Content Include="sample_html\invoice2.html" />
     <Content Include="sample_html\invoice3.html" />
@@ -77,6 +79,7 @@
     <Content Include="sample_html\logo_invoice3.png" />
     <Content Include="vs2015.min.css" />
     <Content Include="Web.config" />
+    <Content Include="Textarea-As-Editor.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="apiGetPDF.aspx.cs">
@@ -98,6 +101,13 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Textarea-As-Editor.aspx.cs">
+      <DependentUpon>Textarea-As-Editor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Textarea-As-Editor.aspx.designer.cs">
+      <DependentUpon>Textarea-As-Editor.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

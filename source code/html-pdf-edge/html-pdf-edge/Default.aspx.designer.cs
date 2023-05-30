@@ -51,12 +51,12 @@ namespace System
         protected global::System.Web.UI.WebControls.Button btPreview;
 
         /// <summary>
-        /// txt control.
+        /// textarea1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txt;
+        protected global::System.Web.UI.WebControls.TextBox textarea1;
     }
 }

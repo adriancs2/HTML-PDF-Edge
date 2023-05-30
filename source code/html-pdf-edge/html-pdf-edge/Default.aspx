@@ -17,10 +17,10 @@
 
         h1 {
             font-family: 'Bad Script', cursive;
-            padding: 10px 0;
             margin: auto;
             margin-bottom: 10px;
             border-bottom: 1px solid #b5b5b5;
+            font-size: 16pt;
         }
 
         .page {
@@ -53,12 +53,11 @@
             }
 
         #divCodeWrapper {
-            height: calc(100vh - 320px);
+            height: calc(100vh - 280px);
             width: 95%;
             position: relative;
             overflow: hidden;
             border: 1px solid #a5a5a5;
-            border-radius: 8px;
         }
 
         #preCode {
@@ -71,42 +70,61 @@
             padding: 0;
             margin: 0;
             background: #1b1b1b;
-            border-radius: 8px;
         }
 
             #preCode code {
-                height: calc(100% - 40px);
-                width: calc(100% - 20px);
-                padding: 10px 10px 30px 10px;
-                font-family: "Roboto Mono", "Cascadia Mono", "Consolas", "Courier New", Courier, monospace;
+                height: calc(100% - 30px);
+                width: calc(100% - 30px);
+                padding: 15px;
+                font-family: "Roboto Mono", monospace;
                 font-weight: 500;
                 font-size: 10pt;
                 line-height: 150%;
                 overflow-y: scroll;
-                overflow-x: scroll;
-                border-radius: 8px;
+                overflow-x: auto;
             }
 
         textarea {
-            font-family: "Roboto Mono", "Cascadia Mono", "Consolas", "Courier New", Courier, monospace;
+            padding: 15px;
+            font-family: "Roboto Mono", monospace;
             font-weight: 500;
             font-size: 10pt;
             line-height: 150%;
             position: absolute;
             top: 0;
             left: 0;
-            height: calc(100% - 40px);
-            width: calc(100% - 20px);
-            padding: 10px 10px 30px 10px;
+            height: calc(100% - 30px);
+            width: calc(100% - 30px);
             z-index: 2;
-            overflow-x: scroll;
+            overflow-x: auto;
             overflow-y: scroll;
             white-space: nowrap;
             background-color: rgba(0,0,0,0);
             color: rgba(255,255,255,0);
-            caret-color: white;
-            border-radius: 8px;
+            caret-color: #d8d8d8;
         }
+
+            textarea::-webkit-scrollbar, #preCode code::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+
+            textarea::-webkit-scrollbar-track, #preCode code::-webkit-scrollbar-track {
+                background: #979797;
+            }
+
+            textarea::-webkit-scrollbar-thumb, #preCode code::-webkit-scrollbar-thumb {
+                background: #7a7a7a;
+                border-radius: 10px;
+            }
+
+                textarea::-webkit-scrollbar-thumb:hover, #preCode code::-webkit-scrollbar-thumb:hover {
+                    background: #656565;
+                }
+
+                textarea::-webkit-scrollbar-thumb:active, #preCode code::-webkit-scrollbar-thumb:active {
+                    background: #383838;
+                }
 
         .divLoading {
             width: 360px;
@@ -136,7 +154,7 @@
     <div class="page">
 
         <h1>
-            <img src="Edge-logo.png" style="height: 50px; width: auto;" />
+            <img src="Edge-logo.png" style="height: 35px; width: auto;" />
             Convert HTML to PDF by Using Microsoft Edge in ASP.NET
         </h1>
 
@@ -144,10 +162,23 @@
         <a href="https://adriancs.com/aspnet-webforms/466/convert-html-to-pdf-by-using-microsoft-edge-in-asp-net/">adriancs.com</a> | 
         <a href="https://www.codeproject.com/Articles/5348585/Convert-HTML-to-PDF-by-Using-Mcrosoft-Edge-in-ASP-NET">CodeProject.com</a>
 
-        <br />
-        <br />
+        <hr />
 
         <form id="form1" runat="server">
+
+            <div class="divButtons" style="margin-bottom: 10px;">
+                Load Sample HTML:
+                <a href="#" onclick="loadDoc('basic'); return false;">basic</a>
+                <a href="#" onclick="loadDoc('form1'); return false;">form1</a>
+                <a href="#" onclick="loadDoc('invoice1'); return false;">invoice1</a>
+                <a href="#" onclick="loadDoc('invoice2'); return false;">invoice2</a>
+                <a href="#" onclick="loadDoc('invoice3'); return false;">invoice3</a>
+                <a href="#" onclick="loadDoc('invoice4'); return false;">invoice4</a>
+            </div>
+
+            Special Thanks to: <a href="https://htmlpdfapi.com/blog/free_html5_invoice_templates">htmlpdfapi.com</a> and Document Templates provided by Microsoft Word 2021 for sample HTML.
+
+            <hr />
 
             <div class="divButtons">
                 Generate PDF:
@@ -160,31 +191,12 @@
 
             <hr />
 
-            <div class="divButtons">
-                Load Sample HTML:
-                <a href="#" onclick="loadDoc('basic'); return false;">basic</a>
-                <a href="#" onclick="loadDoc('form1'); return false;">form1</a>
-                <a href="#" onclick="loadDoc('invoice1'); return false;">invoice1</a>
-                <a href="#" onclick="loadDoc('invoice2'); return false;">invoice2</a>
-                <a href="#" onclick="loadDoc('invoice3'); return false;">invoice3</a>
-                <a href="#" onclick="loadDoc('invoice4'); return false;">invoice4</a>
-            </div>
-
-            <br />
-
-            Special Thanks to: <a href="https://htmlpdfapi.com/blog/free_html5_invoice_templates">htmlpdfapi.com</a> and Document Templates provided by Microsoft Word 2021 for sample HTML.
-
-        <br />
-            <br />
-
-            Edit HTML Here:
+            Edit HTML Here: (Press [Tab] to increase indent, [Shift] + [Tab] to decrease indent)
             <div id="divCodeWrapper">
                 <pre id="preCode"><code id="codeBlock"></code></pre>
-                <asp:TextBox ID="txt" runat="server" TextMode="MultiLine" Wrap="false" spellcheck="false" oninput="updateCode();"></asp:TextBox>
+                <asp:TextBox ID="textarea1" runat="server" TextMode="MultiLine" Wrap="false" spellcheck="false" oninput="updateCode();"></asp:TextBox>
             </div>
         </form>
-
-
 
         <div id="divLoading" class="divLoading" onclick="hideLoading();">
             <img src="loading.gif" /><br />
@@ -193,18 +205,189 @@
 
     </div>
 
-
-
     <script type="text/javascript">
 
-        var txt = document.getElementById('txt');
-        var codeBlock = document.getElementById("codeBlock");
+        const textarea1 = document.getElementById("textarea1");
+        const codeBlock = document.getElementById("codeBlock");
+
+        // copy code from textarea to code block
+        function updateCode() {
+
+            let content = textarea1.value;
+
+            // encode the special characters 
+            content = content.replace(/&/g, '&amp;');
+            content = content.replace(/</g, '&lt;');
+            content = content.replace(/>/g, '&gt;');
+
+            // fill the encoded text to the code
+            codeBlock.innerHTML = content;
+
+            // call highlight.js to render the syntax highligtning
+            highlightJS();
+        }
+
+        // syntax highlight
+        function highlightJS() {
+            document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        }
+
+        // detect content changes in the textarea
+        textarea1.addEventListener("input", () => {
+            updateCode();
+        });
+
+        // sync the scroll bar position between textarea and code block
+        textarea1.addEventListener("scroll", () => {
+            codeBlock.scrollTop = textarea1.scrollTop;
+            codeBlock.scrollLeft = textarea1.scrollLeft;
+        });
+
+        // applying indentation
+        textarea1.addEventListener('keydown', function (e) {
+
+            // [Enter] key pressed detected
+            if (e.key === 'Enter') {
+
+                // suspend default behaviour of [Enter] key press
+                e.preventDefault();
+                const currentPos = this.selectionStart;
+                const currentLine = this.value.substr(0, currentPos).split('\n').pop();
+                const indent = currentLine.match(/^\s*/)[0];
+                const value = this.value;
+                this.value = value.substring(0, currentPos) + '\n' + indent + value.substring(this.selectionEnd);
+                this.selectionStart = this.selectionEnd = currentPos + indent.length + 1;
+
+                // copy the code from textarea to code block      
+                updateCode();
+                return;
+            }
+
+            // [Tab] pressed, but no [Shift]
+            if (e.key === "Tab" && !e.shiftKey &&
+
+                // and no highlight detected
+                textarea1.selectionStart == textarea1.selectionEnd) {
+
+                // suspend default behaviour
+                e.preventDefault();
+
+                // Get the current cursor position
+                let cursorPosition = textarea1.selectionStart;
+
+                // Insert 4 white spaces at the cursor position
+                let newValue = textarea1.value.substring(0, cursorPosition) + "    " +
+                    textarea1.value.substring(cursorPosition);
+
+                // Update the textarea value and cursor position
+                textarea1.value = newValue;
+                textarea1.selectionStart = cursorPosition + 4;
+                textarea1.selectionEnd = cursorPosition + 4;
+
+                // copy the code from textarea to code block      
+                updateCode();
+                return;
+            }
+
+            // [Tab] and [Shift] keypress presence
+            if (e.key === "Tab" && e.shiftKey &&
+
+                // no highlight detected
+                textarea1.selectionStart == textarea1.selectionEnd) {
+
+                // suspend default behaviour
+                e.preventDefault();
+
+                // Get the current cursor position
+                let cursorPosition = textarea1.selectionStart;
+
+                // Check the previous characters for spaces
+                let leadingSpaces = 0;
+                for (let i = 0; i < 4; i++) {
+                    if (textarea1.value[cursorPosition - i - 1] === " ") {
+                        leadingSpaces++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (leadingSpaces > 0) {
+                    // Remove the spaces
+                    let newValue = textarea1.value.substring(0, cursorPosition - leadingSpaces) +
+                        textarea1.value.substring(cursorPosition);
+
+                    // Update the textarea value and cursor position
+                    textarea1.value = newValue;
+                    textarea1.selectionStart = cursorPosition - leadingSpaces;
+                    textarea1.selectionEnd = cursorPosition - leadingSpaces;
+                }
+
+                // copy the code from textarea to code block
+                updateCode();
+                return;
+            }
+
+
+            // [Tab]/[Shift] presence and highlight detected
+            // multiline indentation
+            if (e.key == 'Tab') {
+                e.preventDefault();
+
+                // split the textarea content into lines
+                var lines = this.value.split('\n');
+
+                // find the start/end lines
+                var startPos = this.value.substring(0, this.selectionStart).split('\n').length - 1;
+                var endPos = this.value.substring(0, this.selectionEnd).split('\n').length - 1;
+
+                var spacesRemovedFirstLine = 0;
+                var spacesRemoved = 0;
+
+                // check shift key was pressed (this means we're un-indenting)
+                if (e.shiftKey) {
+                    // iterate over all lines
+                    for (var i = startPos; i <= endPos; i++) {
+                        // remove up to four spaces from the start of the line
+                        lines[i] = lines[i].replace(/^ {1,4}/, function (match) {
+                            if (i == startPos)
+                                spacesRemovedFirstLine = match.length;
+                            spacesRemoved += match.length;
+                            return '';
+                        });
+                    }
+                }
+                // no shift key, so we're indenting
+                else {
+                    // iterate over all lines
+                    for (var i = startPos; i <= endPos; i++) {
+                        // add a tab to the start of the line
+                        lines[i] = '    ' + lines[i]; // four spaces
+                    }
+                }
+
+                // remember the cursor position
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+
+                // put the modified lines back into the textarea
+                this.value = lines.join('\n');
+
+                this.selectionStart = e.shiftKey ? start - spacesRemovedFirstLine : start + 4;
+                this.selectionEnd = e.shiftKey ? end - spacesRemoved : end + 4 * (endPos - startPos + 1);
+
+                // copy the code from textarea to code block      
+                updateCode();
+                return;
+            }
+        });
 
         function generatePDF_Ajax() {
 
             showLoading();
 
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open('POST', '/apiGetPDF.aspx'); // URL of server-side script that generates PDF
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.responseType = 'arraybuffer'; // receive PDF file as binary data
@@ -212,8 +395,8 @@
             xhr.onload = function () {
                 if (this.status === 200) {
                     // create a blob URL from the binary data
-                    var blob = new Blob([this.response], { type: 'application/pdf' });
-                    var url = URL.createObjectURL(blob);
+                    let blob = new Blob([this.response], { type: 'application/pdf' });
+                    let url = URL.createObjectURL(blob);
                     // redirect to the PDF file
                     window.location.href = url;
                 } else {
@@ -225,7 +408,7 @@
                 console.log('Error generating PDF: ' + this.statusText);
             };
 
-            xhr.send('text=' + encodeURIComponent(txt.value)); // data to send to server-side script
+            xhr.send('text=' + encodeURIComponent(textarea1.value)); // data to send to server-side script
         }
 
         function generatePDF_FetchApi() {
@@ -237,7 +420,7 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: 'text=' + encodeURIComponent(txt.value)
+                body: 'text=' + encodeURIComponent(textarea1.value)
             })
                 .then(response => {
                     if (response.ok) {
@@ -248,8 +431,8 @@
                 })
                 .then(data => {
                     // create a blob URL from the binary data
-                    var blob = new Blob([data], { type: 'application/pdf' });
-                    var url = URL.createObjectURL(blob);
+                    let blob = new Blob([data], { type: 'application/pdf' });
+                    let url = URL.createObjectURL(blob);
                     // redirect to the PDF file
                     window.location.href = url;
                 })
@@ -259,13 +442,13 @@
         }
 
         function loadDoc(filename) {
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open('GET', `/sample_html/${filename}.html`, true);
             xhr.responseType = 'text';
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    var htmlText = xhr.responseText;
-                    txt.value = htmlText;
+                    let htmlText = xhr.responseText;
+                    textarea1.value = htmlText;
                     updateCode();
                 }
             };
@@ -284,66 +467,21 @@
         }
 
         function updateCode() {
-            let text = txt.value;
+            let text = textarea1.value;
             text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             codeBlock.innerHTML = text;
             highlightJS();
         }
 
         function highlightJS() {
-            hljs.highlightAll();
+            document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
         }
 
-
-
-
-        txt.addEventListener('keydown', function (event) {
-
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const currentPos = this.selectionStart;
-                const currentLine = this.value.substr(0, currentPos).split('\n').pop();
-                const indent = currentLine.match(/^\s*/)[0];
-                const value = this.value;
-                this.value = value.substring(0, currentPos) + '\n' + indent + value.substring(this.selectionEnd);
-                this.selectionStart = this.selectionEnd = currentPos + indent.length + 1;
-
-                updateCode();
-            }
-
-            else if (event.key === "Tab" && !event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
-                event.preventDefault();
-                const start = txt.selectionStart;
-                const end = txt.selectionEnd;
-                const lines = txt.value.substring(start, end).split("\n");
-                const indentedLines = lines.map((line) => "    " + line); // add 4 spaces to the beginning of each line
-                const indentedText = indentedLines.join("\n");
-                txt.value = txt.value.substring(0, start) + indentedText + txt.value.substring(end);
-                txt.setSelectionRange(start, start + indentedText.length);
-
-                updateCode();
-            }
-
-            else if (event.key === "Tab" && event.shiftKey && txt.selectionStart !== txt.selectionEnd) {
-                event.preventDefault();
-                const start = txt.selectionStart;
-                const end = txt.selectionEnd;
-                const lines = txt.value.substring(start, end).split("\n");
-                const unindentedLines = lines.map((line) => line.replace(/^ {4}/, "")); // remove 4 spaces from the beginning of each line
-                const unindentedText = unindentedLines.join("\n");
-                txt.value = txt.value.substring(0, start) + unindentedText + txt.value.substring(end);
-                txt.setSelectionRange(start, start + unindentedText.length);
-
-                updateCode();
-            }
-
-            //codeBlock.scrollTop = txt.scrollTop;
-            //codeBlock.scrollLeft = txt.scrollLeft;
-        });
-
-        txt.addEventListener("scroll", () => {
-            codeBlock.scrollTop = txt.scrollTop;
-            codeBlock.scrollLeft = txt.scrollLeft;
+        textarea1.addEventListener("scroll", () => {
+            codeBlock.scrollTop = textarea1.scrollTop;
+            codeBlock.scrollLeft = textarea1.scrollLeft;
         });
 
 
