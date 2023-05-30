@@ -369,9 +369,8 @@
             <option value="https://fonts.googleapis.com/css2?family=Xanh+Mono&display=swap">Xanh Mono</option>
             <option value="https://fonts.googleapis.com/css2?family=Monofett&display=swap">Monofett</option>
         </select>
-        Font Size:
+        Font Size (pt):
         <input id="inputFontSize" type="number" step=".1" value="12" style="width: 40px;" />
-        PT
         Language:
         <select id="selectLanguage">
             <option value="language-html">HTML</option>
@@ -589,9 +588,11 @@
                 // put the modified lines back into the textarea
                 this.value = lines.join('\n');
 
+                // adjust the position of cursor start selection
                 this.selectionStart = e.shiftKey ?
                     start - spacesRemovedFirstLine : start + 4;
 
+                // adjust the position of cursor end selection
                 this.selectionEnd = e.shiftKey ?
                     end - spacesRemoved : end + 4 * (endPos - startPos + 1);
 
