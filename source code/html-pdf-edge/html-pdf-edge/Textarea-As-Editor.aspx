@@ -9,7 +9,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap');
 
         #divCodeWrapper {
-            height: 500px;
+            height: calc(100vh - 200px);
+            max-height: 600px;
             width: 900px;
             overflow: hidden;
             border: 1px solid #a5a5a5;
@@ -377,7 +378,9 @@
         </select>
     </p>
 
-    <p>Source Code: <a href="https://github.com/adriancs2/HTML-PDF-Edge/blob/main/source%20code/html-pdf-edge/html-pdf-edge/Textarea-As-Editor.aspx">github.com</a></p>
+    <p>Source Code: <a href="https://github.com/adriancs2/HTML-PDF-Edge/blob/main/source%20code/html-pdf-edge/html-pdf-edge/Textarea-As-Editor.aspx">github.com</a>
+         | Addon Functions: [Enter] will maintain indentation. [Tab] / [Tab]+[Shift] will increase/decrease indentation (support multiline).
+    </p>
 
 
 
@@ -389,15 +392,6 @@
     </div>
 
     <!-- End of the code editor -->
-
-
-
-    <h2>Additional Functions:</h2>
-    <ul>
-        <li>Press [Enter] will maintain indentation as previous line.</li>
-        <li>Press [Tab]: Increase indentation (Support multiline).</li>
-        <li>Press [Tab] + [Shift]: Decrease indentation (Support multiline).</li>
-    </ul>
 
 
 
