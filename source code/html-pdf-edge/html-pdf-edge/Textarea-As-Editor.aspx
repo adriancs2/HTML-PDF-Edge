@@ -75,10 +75,19 @@
     <h1>Syntax Highlightning for Textarea</h1>
 
     <p>
-        <string>Using Textarea as Code Editor</string>. 
+        <string>Using Textarea as Code Editor</string> | 
         Article: 
-        <a href="https://adriancs.com/html-css-js/1015/syntax-highlightning-in-textarea-html/">adriancs.com</a> | 
-        <a href="https://www.codeproject.com/Articles/5361561/Syntax-Highlightning-for-Textarea-HTML">codeproject.com</a> |
+        <a href="https://adriancs.com/html-css-js/1015/syntax-highlightning-in-textarea-html/">adriancs.com</a>,  
+        <a href="https://www.codeproject.com/Articles/5361561/Syntax-Highlightning-for-Textarea-HTML">codeproject.com</a>
+        | Source Code: <a href="https://github.com/adriancs2/HTML-PDF-Edge/blob/main/source%20code/html-pdf-edge/html-pdf-edge/Textarea-As-Editor.aspx">github.com</a>
+    </p>
+
+    <p>
+         Addon Functions: [Enter] will maintain indentation. [Tab] / [Shift]+[Tab] will increase/decrease indentation (support multiline).
+    </p>
+
+
+    <p>
         Theme:
         <select id="dropStyle" onchange="updateThemeStyle(this);">
             <option>a11y-dark.min.css</option>
@@ -377,11 +386,6 @@
             <option value="language-kotlin">Kotlin</option>
         </select>
     </p>
-
-    <p>Source Code: <a href="https://github.com/adriancs2/HTML-PDF-Edge/blob/main/source%20code/html-pdf-edge/html-pdf-edge/Textarea-As-Editor.aspx">github.com</a>
-         | Addon Functions: [Enter] will maintain indentation. [Tab] / [Tab]+[Shift] will increase/decrease indentation (support multiline).
-    </p>
-
 
 
     <!-- Textarea, the code editor -->
