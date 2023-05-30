@@ -635,7 +635,7 @@
         function loadSampleHtml() {
 
             // using fetch api to load a sample html document
-            fetch('/sampledoc.html')
+            fetch('/Textarea-As-Editor.aspx')
                 .then(response => response.text())
                 .then(html => {
                     textarea1.value = html;
