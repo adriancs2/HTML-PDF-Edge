@@ -90,7 +90,7 @@
 
     <p>
         Theme:
-        <select id="dropStyle" onchange="updateThemeStyle(this);">
+        <select id="selectStyle">
             <option>a11y-dark.min.css</option>
             <option>a11y-light.min.css</option>
             <option>agate.min.css</option>
@@ -603,7 +603,7 @@
         });
 
         // change theme
-        document.getElementById("dropStyle").addEventListener("change", (e) => {
+        document.getElementById("selectStyle").addEventListener("change", (e) => {
             document.getElementById("theme1").href = `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/${e.target.value}`;
         });
 
