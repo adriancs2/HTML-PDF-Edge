@@ -535,22 +535,22 @@
                 e.preventDefault();
 
                 // split the textarea content into lines
-                var lines = this.value.split('\n');
+                let lines = this.value.split('\n');
 
                 // find the start/end lines
-                var startPos = this.value.substring(0, this.selectionStart).split('\n').length - 1;
-                var endPos = this.value.substring(0, this.selectionEnd).split('\n').length - 1;
+                let startPos = this.value.substring(0, this.selectionStart).split('\n').length - 1;
+                let endPos = this.value.substring(0, this.selectionEnd).split('\n').length - 1;
 
-                // calculating total white spaces are removed
+                // calculating total removed white spaces
                 // these values will be used for adjusting new cursor position
-                var spacesRemovedFirstLine = 0;
-                var spacesRemoved = 0;
+                let spacesRemovedFirstLine = 0;
+                let spacesRemoved = 0;
 
                 // [Shift] key was pressed (this means we're un-indenting)
                 if (e.shiftKey) {
 
                     // iterate over all lines
-                    for (var i = startPos; i <= endPos; i++) {
+                    for (let i = startPos; i <= endPos; i++) {
 
                         // /^ = from the start of the line,
                         // {1,4} = remove in between 1 to 4 white spaces that may existed
@@ -575,15 +575,15 @@
                 // no shift key, so we're indenting
                 else {
                     // iterate over all lines
-                    for (var i = startPos; i <= endPos; i++) {
+                    for (let i = startPos; i <= endPos; i++) {
                         // add a tab to the start of the line
                         lines[i] = '    ' + lines[i]; // four spaces
                     }
                 }
 
                 // remember the cursor position
-                var start = this.selectionStart;
-                var end = this.selectionEnd;
+                let start = this.selectionStart;
+                let end = this.selectionEnd;
 
                 // put the modified lines back into the textarea
                 this.value = lines.join('\n');
