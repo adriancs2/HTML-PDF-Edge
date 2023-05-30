@@ -377,6 +377,8 @@
         </select>
     </p>
 
+    <p>Source Code: <a href="https://github.com/adriancs2/HTML-PDF-Edge/blob/main/source%20code/html-pdf-edge/html-pdf-edge/Textarea-As-Editor.aspx">github.com</a></p>
+
 
 
     <!-- Textarea, the code editor -->
