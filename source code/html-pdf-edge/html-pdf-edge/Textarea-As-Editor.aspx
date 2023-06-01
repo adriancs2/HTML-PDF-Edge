@@ -11,7 +11,7 @@
         #divCodeWrapper {
             height: calc(100vh - 200px);
             max-height: 600px;
-            width: 900px;
+            width: 1200px;
             overflow: hidden;
             border: 1px solid #a5a5a5;
             position: relative;
@@ -75,7 +75,7 @@
     <h1>Syntax Highlightning for Textarea</h1>
 
     <p>
-        <string>Using Textarea as Code Editor</string>
+        <string>Using Textarea as Code Editor</string> (v2.3) 
         | 
         Article: 
         <a href="https://adriancs.com/html-css-js/1015/syntax-highlightning-in-textarea-html/">adriancs.com</a>,  
@@ -342,32 +342,32 @@
         </select>
         Font:
         <select id="selectFont">
-            <option value="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap">Roboto Mono</option>
-            <option value="Consolas">Consolas</option>
-            <option value="Cascadia Mono">Cascadia Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">Inconsolata</option>
-            <option value="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap">Source Code Pro</option>
-            <option value="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap">IBM Plex Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Space+Mono:ital@1&display=swap">Space Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap">PT Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap">Ubuntu Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=&family=Ubuntu+Mono&display=swap">Nanum Gothic Coding</option>
-            <option value="https://fonts.googleapis.com/css2?family=Cousine&display=swap">Cousine</option>
-            <option value="https://fonts.googleapis.com/css2?family=Cousine&display=swap">Fira Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap">Share Tech Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap">Courier Prime</option>
-            <option value="https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap">Anonymous Pro</option>
-            <option value="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap">Cutive Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=VT323&display=swap">VT323</option>
-            <option value="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap">JetBrains Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Noto+Sans+Mono&display=swap">Noto Sans Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Red+Hat+Mono&display=swap">Red Hat Mono</option>
-            <option value="'https://fonts.googleapis.com/css2?family=Martian+Mono&display=swap">Martian Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap">Major Mono Display</option>
-            <option value="https://fonts.googleapis.com/css2?family=Nova+Mono&display=swap">Nova Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap">Syne Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Xanh+Mono&display=swap">Xanh Mono</option>
-            <option value="https://fonts.googleapis.com/css2?family=Monofett&display=swap">Monofett</option>
+            <option>Roboto Mono</option>
+            <option>Consolas</option>
+            <option>Cascadia Mono</option>
+            <option>Inconsolata</option>
+            <option>Source Code Pro</option>
+            <option>IBM Plex Mono</option>
+            <option>Space Mono</option>
+            <option>PT Mono</option>
+            <option>Ubuntu Mono</option>
+            <option>Nanum Gothic Coding</option>
+            <option>Cousine</option>
+            <option>Fira Mono</option>
+            <option>Share Tech Mono</option>
+            <option>Courier Prime</option>
+            <option>Anonymous Pro</option>
+            <option>Cutive Mono</option>
+            <option>VT323</option>
+            <option>JetBrains Mono</option>
+            <option>Noto Sans Mono</option>
+            <option>Red Hat Mono</option>
+            <option>Martian Mono</option>
+            <option>Major Mono Display</option>
+            <option>Nova Mono</option>
+            <option>Syne Mono</option>
+            <option>Xanh Mono</option>
+            <option>Monofett</option>
         </select>
         Font Size (pt):
         <input id="inputFontSize" type="number" step=".1" value="12" style="width: 40px;" />
@@ -610,11 +610,13 @@
         // change font
         function updateFont() {
             let selectFont = document.getElementById("selectFont");
+            let fontName = selectFont.options[selectFont.selectedIndex].text;
+            let fontNameUrl = fontName.replace(" ", "+");
             let inputFontSize = document.getElementById("inputFontSize");
             document.getElementById("style2").textContent = `
-            @import url('${selectFont.value}');
+            @import url('https://fonts.googleapis.com/css2?&display=swap&family=${fontNameUrl}');
             pre, code, textarea {
-                font-family: "${selectFont.options[selectFont.selectedIndex].text}", monospace !important;
+                font-family: "${fontName}", monospace !important;
                 font-size: ${inputFontSize.value}pt !important;
             }`;
         }
