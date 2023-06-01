@@ -71,31 +71,6 @@ PDF.TransmitMethod transmitMethod = PDF.TransmitMethod.Inline;
 PDF.PublishHtml(html, "file.pdf", transmitMethod);
 ```
 
-Convert a webpage into pdf. Example:
-
-```cs
-string urlHtml = "https://www.website.com/content.html";
-string filePathPDF = @"C:\file.pdf";
-```
-
-`PublishUrl(string url, string filenamePdf, TransmitMethod transmitMethod)`
-
-`PublishHtmlInline(string htmlContent)`
-
-`PublishHtmlAttachment(string htmlContent, string filenamePdf)`
-
-PublishHtml(string htmlContent, string filenamePdf, TransmitMethod transmitMethod)`
-
-
-To generate PDF and download as attachment:
-```
-pdf_edge.GeneratePdfAttachment(html, "file.pdf");
-```
-To generate PDF and display in browser:
-```
-pdf_edge.GeneratePdfInline(html);
-```
-
 ## Important CSS Properties For Generating PDF
 There are a few necessary CSS that you have to include in the HTML page in order for this to work properly.
 
