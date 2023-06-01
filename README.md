@@ -1,192 +1,77 @@
 # Convert HTML to PDF by Using Microsoft Edge
 
-Convert HTML to PDF by Using Microsoft Edge
-
 Live Demo: [http://html-pdf-edge.adriancs.com/](http://html-pdf-edge.adriancs.com/)
 
 Nuget: [https://www.nuget.org/packages/Html-PDF-Edge](https://www.nuget.org/packages/Html-PDF-Edge)
 
 PM> NuGet\Install-Package Html-PDF-Edge
 
-![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot1.png)
+## Usage
 
-Install the NUGET Package, or download the source code. Extract and add the C# class file "pdf_edge.cs" into your project.
+Install the Nuget Package, or download the source code. Extract and add the C# class file `html-pdf-edge.cs` into your project.
 
-To generate PDF and download as attachment:
-```
-pdf_edge.GeneratePdfAttachment(html, "file.pdf");
-```
-To generate PDF and display in browser:
-```
-pdf_edge.GeneratePdfInline(html);
-```
-## The Basics
+Available methods:
 
-Microsoft Edge is a chromium based web browser which includes a built-in function that can generate PDF from HTML (or convert HTML to PDF).
+- `PDF.GeneratePdf(string urlHtml, string filePathPDF)`
+- `PDF.PublishUrl(string url, string filenamePdf, TransmitMethod transmitMethod)`
+- `PDF.PublishHtmlInline(string htmlContent)`
+- `PDF.PublishHtmlAttachment(string htmlContent, string filenamePdf)`
+- `PDF.PublishHtml(string htmlContent, string filenamePdf, TransmitMethod transmitMethod)`
 
-Here's the basic command line syntax:
+----
+## Example of Usage
 
-```
-msedge
---headless
---disable-gpu
---run-all-compositor-stages-before-draw
---print-to-pdf="{filePath}"
-{url}
+`PDF.GeneratePdf`
+----
+
+```cs
+string url = "https://www.adriancs.com/demo/invoice.html";
+string url = "file:///C:/Users/Username/Documents/invoice.html";
+string filePathPDF = @"C:\file.pdf";
+PDF.GeneratePdf(url, filePathPDF);
 ```
 
-Example of command line with parameters:
+`PDF.PublishUrl`
+----
 
-```
-msedge --headless --disable-gpu --run-all-compositor-stages-before-draw
---print-to-pdf="D:\\mysite\temp\pdf\2059060194.pdf"
-http://localhost:50964/temp/pdf/2059060194.html
-```
-
-With this, I have written a simple C# class library that automate this process.
-
-Here is the C# coding that works in behind:
-
-To start off, add the following USING statement:
-
-```
-using System.Diagnostics;
-using System.IO;
-```
-
-The method that generates the PDF:
-
-```
-public static void GeneratePdf(string url, string filePath)
-{
-    using (var p = new Process())
-    {
-        p.StartInfo.FileName = "msedge";
-        p.StartInfo.Arguments = $"--headless --disable-gpu 
-            --run-all-compositor-stages-before-draw
-            --print-to-pdf=\"{filePath}\" {url}";
-        p.Start();
-        p.WaitForExit();
-    }
-}
-```
-
-Above method requires you to supply the URL of HTML and file path, here is the method to automate the generating of URL and file path.
-
-First, define an enum for transmission:
-
-```
+```cs
 public enum TransmitMethod
 {
-    None,
-    Attachment,
-    Inline
+    None,        // save the pdf and do nothing
+    Attachment,  // transmit the pdf as attachment
+    Inline,      // transmit the pdf and show it in browser
+    Redirect     // redirect the browser to the url of the pdf
 }
+
+PDF.TransmitMethod transmitMethod = PDF.TransmitMethod.Inline;
+PDF.PublishUrl(url, "file.pdf", transmitMethod);
 ```
 
-Then the main method:
+`PDF.PublishHtmlInline`
+----
 
-```
-static void EdgePublish(string html, TransmitMethod transmitMethod, string filename)
-{
-    // Create a temporary folder for storing the PDF
-
-    string folderTemp = HttpContext.Current.Server.MapPath("~/temp/pdf");
-
-    if (!Directory.Exists(folderTemp))
-    {
-        Directory.CreateDirectory(folderTemp);
-    }
-
-    // Create 2 temporary filename
-
-    Random rd = new Random();
-    string randomstr = rd.Next(100000000, int.MaxValue).ToString();
-            
-    string fileHtml = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.html");
-    string filePdf = HttpContext.Current.Server.MapPath($"~/temp/pdf/{randomstr}.pdf");
-
-    // Create the HTML file
-
-    File.WriteAllText(fileHtml, html);
-
-    // Obtain the URL of the HTML file
-
-    var r = HttpContext.Current.Request.Url;
-    string url = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{randomstr}.html";
-
-    // Create the PDF file
-
-    GeneratePdf(url, filePdf);
-
-    // Obtain the file size
-            
-    FileInfo fi = new FileInfo(filePdf);
-    string filelength = fi.Length.ToString();
-
-    // Load the file into memory (byte array)
-
-    byte[] ba = File.ReadAllBytes(filePdf);
-
-    // Delete the 2 temp files from server
-
-    try
-    {
-        File.Delete(filePdf);
-    }
-    catch { }
-
-    try
-    {
-        File.Delete(fileHtml);
-    }
-    catch { }
-
-    // Transmit the PDF for download
-
-    HttpContext.Current.Response.Clear();
-
-    if (transmitMethod == TransmitMethod.Inline)
-        HttpContext.Current.Response.AddHeader("Content-Disposition", "inline");
-    else if (transmitMethod == TransmitMethod.Attachment)
-        HttpContext.Current.Response.AddHeader("Content-Disposition", $"attachment; filename=\"{filename}\"");
-
-    HttpContext.Current.Response.ContentType = "application/pdf";
-    HttpContext.Current.Response.AddHeader("Content-Length", filelength);
-    HttpContext.Current.Response.BinaryWrite(ba);
-    HttpContext.Current.Response.End();
-}
+```cs
+string html = "<html><head></head><body><h1>Hello</h1></body></html>";
+PDF.PublishHtmlInline(html);
 ```
 
-## Using Microsoft Edge as PDF generator is better than Chrome.exe.
+`PDF.PublishHtmlAttachment`
+----
 
-Learn more about using Chrome.exe as PDF Generator: [https://github.com/adriancs2/HTML-PDF-Chrome](https://github.com/adriancs2/HTML-PDF-Chrome)
+```cs
+string html = "<html><head></head><body><h1>Hello</h1></body></html>";
+PDF.PublishHtmlAttachment(html, "file.pdf");
+```
 
-I have tested this implementation (using Edge) in the following environment:
+`PDF.PublishHtml`
+----
 
-- Local IIS hosting
-- Web Hosting (smarterasp.net)
-- VPS Web Hosting
+```cs
+PDF.TransmitMethod transmitMethod = PDF.TransmitMethod.Inline;
+PDF.PublishHtml(html, "file.pdf", transmitMethod);
+```
 
-All above environment are able to generate PDF without issues. It runs smoothly without the need to configure the permission, Application Pool Identity and Website IIS authentication. I have a  more seemless integration experience if compared to using Chrome.
-
-The following screenshot shows that the execution of MS Edge is allowed even with default permission settings:
-
-![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot2.png)
-
-Chrome.exe, however is not so permissive in most environment. This is because executing an EXE over a web server is generally prohibitted due to security issues.
-
-For Chrome.exe, I failed to run it at web hosting environment (smarterasp.net).
-
-Even in Local IIS hosting, I have to set the Application Pool Identify to "LocalSystem" in order for Chrome.exe to run properly.
-
-![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot3.png)
-
-But Microsoft Edge does not have such requirements. Microsoft Edge is able to be executed with lowest/default permission and security settings.
-
-Therefore, it is highly recommended to use Microsoft Edge than Chrome.exe.
-
-## Important CSS Properties
+## Important CSS Properties For Generating PDF
 There are a few necessary CSS that you have to include in the HTML page in order for this to work properly.
 
 1. Set page margin to 0 (zero)
@@ -365,3 +250,56 @@ In stead, include the root path like this:
 
 </html>
 ```
+
+## How Does It Works Under the Hood
+
+Microsoft Edge is a chromium based web browser which includes a built-in function that can generate PDF from HTML (or convert HTML to PDF).
+
+Here's the basic command line:
+
+```
+msedge --headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf="{filePath}" {url}
+```
+
+Example of command line with parameters:
+
+```
+msedge --headless --disable-gpu --run-all-compositor-stages-before-draw
+--print-to-pdf="D:\\www.mysite.com\temp\pdf\2059060194.pdf"
+http://localhost:50964/temp/pdf/2059060194.html
+```
+
+This project is basically gathered the values and uses a process to execute the command line:
+
+```cs
+using System.Diagnostics;
+
+using (var p = new Process())
+{
+    p.StartInfo.FileName = "msedge";
+    p.StartInfo.Arguments = $"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=\"{filePath}\" {url}";
+    p.Start();
+    p.WaitForExit();
+}
+```
+
+Above code will generate the PDF and save it at the location `filePath`, then it can be further transmitted for download.
+
+Since Google Chrome is also a Chromium based web browser, it can also be run with the same command line. You can check out my another PDF generator which is by using Google Chrome to convert HTML to PDF.
+
+Here: [https://github.com/adriancs2/HTML-PDF-Chrome](https://github.com/adriancs2/HTML-PDF-Chrome)
+
+## Running in Web Hosting Environment
+
+I have tested this implementation (using Edge) in the following environment:
+
+- Local IIS hosting
+- Web Hosting (smarterasp.net)
+- VPS Web Hosting
+
+All above environment are able to generate PDF without issues. It runs smoothly without the need to configure the permission, Application Pool Identity and Website IIS authentication. 
+
+The following screenshot shows that the execution of MS Edge is allowed with default permission settings:
+
+![](https://raw.githubusercontent.com/adriancs2/HTML-PDF-Edge/main/wiki/screenshot2.png)
+
