@@ -21,7 +21,8 @@ Available methods:
 ----
 ## Example of Usage
 
-**PDF.GeneratePdf**
+`PDF.GeneratePdf`
+----
 
 ```cs
 string url = "https://www.adriancs.com/demo/invoice.html";
@@ -30,7 +31,8 @@ string filePathPDF = @"C:\file.pdf";
 PDF.GeneratePdf(url, filePathPDF);
 ```
 
-**PDF.PublishUrl**
+`PDF.PublishUrl`
+----
 
 ```cs
 public enum TransmitMethod
