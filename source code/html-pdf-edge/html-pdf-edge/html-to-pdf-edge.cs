@@ -22,7 +22,7 @@ namespace System
         /// </summary>
         /// <param name="urlHtml">The webpage</param>
         /// <param name="filePathPDF">The file path of pdf</param>
-        public static void GeneratePdf(string urlHtml, string filePathPDF)
+        public static void GeneratePdf(string url, string filePathPDF)
         {
             if (File.Exists(filePathPDF))
             {
@@ -36,7 +36,7 @@ namespace System
             using (var p = new Process())
             {
                 p.StartInfo.FileName = "msedge";
-                p.StartInfo.Arguments = $@"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=""{filePathPDF}"" {urlHtml}";
+                p.StartInfo.Arguments = $@"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=""{filePathPDF}"" {url}";
                 p.Start();
                 p.WaitForExit();
             }

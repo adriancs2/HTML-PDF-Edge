@@ -18,7 +18,7 @@ namespace System
                 return;
             }
 
-            PDF.PublishHtml(text);
+            PDF.PublishHtmlInline(text);
         }
     }
 }

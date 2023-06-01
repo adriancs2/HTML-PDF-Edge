@@ -24,12 +24,12 @@ namespace System
 
         protected void btGeneratePdfAttachment_Click(object sender, EventArgs e)
         {
-            PDF.PublishHtml(textarea1.Text, "file.pdf");
+            PDF.PublishHtmlAttachment(textarea1.Text, "file.pdf");
         }
 
         protected void btGeneratePdfInline_Click(object sender, EventArgs e)
         {
-            PDF.PublishHtml(textarea1.Text, null, PDF.TransmitMethod.Inline);
+            PDF.PublishHtmlInline(textarea1.Text);
         }
     }
 }
