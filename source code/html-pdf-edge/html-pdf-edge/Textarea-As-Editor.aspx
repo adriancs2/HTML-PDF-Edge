@@ -640,7 +640,7 @@
             fetch('/Textarea-As-Editor.aspx')
                 .then(response => response.text())
                 .then(html => {
-                    textarea1.value = html;
+                    textarea1.value = html.trim();
                     updateCode();
                 });
         }

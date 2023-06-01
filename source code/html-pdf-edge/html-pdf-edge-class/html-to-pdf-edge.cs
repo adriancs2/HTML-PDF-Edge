@@ -17,6 +17,11 @@ namespace System
             Redirect
         }
 
+        /// <summary>
+        /// Convert a webpage into pdf
+        /// </summary>
+        /// <param name="urlHtml">The webpage</param>
+        /// <param name="filePathPDF">The file path of pdf</param>
         public static void GeneratePdf(string urlHtml, string filePathPDF)
         {
             if (File.Exists(filePathPDF))
@@ -38,7 +43,7 @@ namespace System
 
             while (!File.Exists(filePathPDF))
             {
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(250);
             }
         }
 
@@ -109,6 +114,12 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// Convert a webpage into pdf and transmit it for download
+        /// </summary>
+        /// <param name="url">The webpage</param>
+        /// <param name="filenamePdf">The filename of pdf (without the file path)</param>
+        /// <param name="transmitMethod">The transmit method</param>
         public static void PublishUrl(string url, string filenamePdf, TransmitMethod transmitMethod)
         {
             if (!filenamePdf.ToLower().EndsWith(".pdf"))
@@ -132,16 +143,31 @@ namespace System
             Publish(transmitMethod, filenamePdf, filePdfTemp);
         }
 
-        public static void PublishHtml(string htmlContent)
+        /// <summary>
+        /// Convert html to pdf and transmit it for download as inline
+        /// </summary>
+        /// <param name="htmlContent"></param>
+        public static void PublishHtmlInline(string htmlContent)
         {
             PublishHtml(htmlContent, "", TransmitMethod.Inline);
         }
 
-        public static void PublishHtml(string htmlContent, string filenamePdf)
+        /// <summary>
+        /// Convert html to pdf and transmit it for download as attachment.
+        /// </summary>
+        /// <param name="htmlContent">The html text</param>
+        /// <param name="filenamePdf">Filename of PDF</param>
+        public static void PublishHtmlAttachment(string htmlContent, string filenamePdf)
         {
             PublishHtml(htmlContent, filenamePdf, TransmitMethod.Attachment);
         }
 
+        /// <summary>
+        /// Convert html to pdf and transmit it for download
+        /// </summary>
+        /// <param name="htmlContent">The html text</param>
+        /// <param name="filenamePdf">Filename of PDF (optional), this parameter can be blank inline download transmission</param>
+        /// <param name="transmitMethod">Transmission type</param>
         public static void PublishHtml(string htmlContent, string filenamePdf, TransmitMethod transmitMethod)
         {
             if (filenamePdf == null || filenamePdf.Length == 0)
