@@ -19,6 +19,7 @@
     <AssemblyVersion>2</AssemblyVersion>
     <FileVersion>2</FileVersion>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
