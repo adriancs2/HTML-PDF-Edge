@@ -5,7 +5,7 @@
     <RootNamespace>html_pdf_edge_class</RootNamespace>
     <PackageId>html-pdf-edge</PackageId>
     <Title>Convert HTML to PDF with Edge</Title>
-    <Version>2</Version>
+    <Version>2.1</Version>
     <Authors>adriancs</Authors>
     <Company>adriancs</Company>
     <Product>Convert HTML to PDF with Edge</Product>
@@ -16,8 +16,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>pdf;html;edge</PackageTags>
     <PackageReleaseNotes>Improve naming of methods</PackageReleaseNotes>
-    <AssemblyVersion>2</AssemblyVersion>
-    <FileVersion>2</FileVersion>
+    <AssemblyVersion>2.1</AssemblyVersion>
+    <FileVersion>2.1</FileVersion>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>

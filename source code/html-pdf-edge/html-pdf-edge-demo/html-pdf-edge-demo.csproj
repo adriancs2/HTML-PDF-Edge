@@ -63,10 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="apiGetPDF.aspx" />
+    <Content Include="bindCodeEditorShortcutKeys.js" />
     <Content Include="Default.aspx" />
     <Content Include="Edge-logo.png" />
     <Content Include="highlight.min.js" />
     <Content Include="loading.gif" />
+    <Content Include="favicon.ico" />
     <Content Include="pdf.jpg" />
     <Content Include="sampledoc.html" />
     <Content Include="sample_html\basic.html" />

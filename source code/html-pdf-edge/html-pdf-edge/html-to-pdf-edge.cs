@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Web;
 using static System.PDF;
@@ -17,6 +18,8 @@ namespace System
             Redirect
         }
 
+        public const string Version = "2.1";
+
         /// <summary>
         /// Convert a webpage into pdf
         /// </summary>
@@ -24,26 +27,21 @@ namespace System
         /// <param name="filePathPDF">The file path of pdf</param>
         public static void GeneratePdf(string url, string filePathPDF)
         {
-            if (File.Exists(filePathPDF))
+            string encodedUrl = Uri.EscapeUriString(url);
+
+            string folderPath = Path.GetDirectoryName(filePathPDF);
+
+            if (!Directory.Exists(folderPath))
             {
-                try
-                {
-                    File.Delete(filePathPDF);
-                }
-                catch { }
+                Directory.CreateDirectory(folderPath);
             }
 
             using (var p = new Process())
             {
                 p.StartInfo.FileName = "msedge";
-                p.StartInfo.Arguments = $@"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=""{filePathPDF}"" {url}";
+                p.StartInfo.Arguments = $@"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf=""{filePathPDF}"" {encodedUrl}";
                 p.Start();
                 p.WaitForExit();
-            }
-
-            while (!File.Exists(filePathPDF))
-            {
-                System.Threading.Thread.Sleep(250);
             }
         }
 
@@ -180,6 +178,10 @@ namespace System
                 filenamePdf = filenamePdf + ".pdf";
             }
 
+            filenamePdf = filenamePdf.Replace(" ", "_");
+
+            filenamePdf = EscapeFileName(filenamePdf);
+
             string folderTemp = HttpContext.Current.Server.MapPath("~/temp/pdf");
 
             if (!Directory.Exists(folderTemp))
@@ -187,14 +189,18 @@ namespace System
                 Directory.CreateDirectory(folderTemp);
             }
 
-            string fileHtmlTemp = HttpContext.Current.Server.MapPath($"~/temp/pdf/{filenamePdf}.html");
+            Random rd = new Random();
+
+            string htmlRandomFilename = rd.Next(100000, int.MaxValue).ToString();
+
+            string fileHtmlTemp = HttpContext.Current.Server.MapPath($"~/temp/pdf/{htmlRandomFilename}.html");
             string filePdfTemp = HttpContext.Current.Server.MapPath($"~/temp/pdf/{filenamePdf}");
 
             File.WriteAllText(fileHtmlTemp, htmlContent);
 
             Uri r = HttpContext.Current.Request.Url;
 
-            string urlHtml = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{filenamePdf}.html";
+            string urlHtml = $"{r.Scheme}://{r.Host}:{r.Port}/temp/pdf/{htmlRandomFilename}.html";
 
             GeneratePdf(urlHtml, filePdfTemp);
 
@@ -207,6 +213,17 @@ namespace System
             DeleteOldFiles(filenamePdf, folderTemp);
 
             Publish(transmitMethod, filenamePdf, filePdfTemp);
+        }
+
+        static string EscapeFileName(string fileName)
+        {
+            string escapedFileName = string.Concat(fileName.Select(c => IsValidFileNameChar(c) ? c.ToString() : "_"));
+            return escapedFileName;
+        }
+
+        static bool IsValidFileNameChar(char c)
+        {
+            return !Path.GetInvalidFileNameChars().Contains(c);
         }
     }
 }

@@ -145,6 +145,7 @@
         }
     </style>
 
+    <script src="bindCodeEditorShortcutKeys.js"></script>
     <link href="vs2015.min.css" rel="stylesheet" type="text/css" />
     <script src="highlight.min.js"></script>
 
@@ -160,7 +161,8 @@
 
         Project Site: <a href="https://github.com/adriancs2/HTML-PDF-Edge">github.com</a> | 
         <a href="https://adriancs.com/aspnet-webforms/466/convert-html-to-pdf-by-using-microsoft-edge-in-asp-net/">adriancs.com</a> | 
-        <a href="https://www.codeproject.com/Articles/5348585/Convert-HTML-to-PDF-by-Using-Mcrosoft-Edge-in-ASP-NET">CodeProject.com</a>
+        <a href="https://www.codeproject.com/Articles/5348585/Convert-HTML-to-PDF-by-Using-Mcrosoft-Edge-in-ASP-NET">CodeProject.com</a> |
+        Nuget: <a href="https://www.nuget.org/packages/html-pdf-edge">https://www.nuget.org/packages/html-pdf-edge</a>
 
         <hr />
 
@@ -191,11 +193,21 @@
 
             <hr />
 
-            Edit HTML Here: (Press [Tab] to increase indent, [Shift] + [Tab] to decrease indent)
+            Edit HTML Here: 
             <div id="divCodeWrapper">
                 <pre id="preCode"><code id="codeBlock"></code></pre>
                 <asp:TextBox ID="textarea1" runat="server" TextMode="MultiLine" Wrap="false" spellcheck="false" oninput="updateCode();"></asp:TextBox>
             </div>
+
+            <br />
+            Shortcut Keys:<br />
+            [Enter]: Maintain indentation as previous line.<br />
+            [Tab] / [Shift]+[Tab]: Increase/decrease indentation (multiline supported)<br />
+            [Shift] + [Del]/[Backspace]: Delete entire row.<br />
+            [Home]: Move cursor to the front of first non-white space character.<br />
+            <br />
+            Read More About <a href="https://adriancs.com/html-css-js/1015/syntax-highlightning-in-textarea-html/">Tranform Textarea Into Code Editor With Syntax Highlight Support</a>
+
         </form>
 
         <div id="divLoading" class="divLoading" onclick="hideLoading();">
@@ -244,145 +256,7 @@
             codeBlock.scrollTop = textarea1.scrollTop;
             codeBlock.scrollLeft = textarea1.scrollLeft;
         });
-
-        // applying indentation
-        textarea1.addEventListener('keydown', function (e) {
-
-            // [Enter] key pressed detected
-            if (e.key === 'Enter') {
-
-                // suspend default behaviour of [Enter] key press
-                e.preventDefault();
-                const currentPos = this.selectionStart;
-                const currentLine = this.value.substr(0, currentPos).split('\n').pop();
-                const indent = currentLine.match(/^\s*/)[0];
-                const value = this.value;
-                this.value = value.substring(0, currentPos) + '\n' + indent + value.substring(this.selectionEnd);
-                this.selectionStart = this.selectionEnd = currentPos + indent.length + 1;
-
-                // copy the code from textarea to code block      
-                updateCode();
-                return;
-            }
-
-            // [Tab] pressed, but no [Shift]
-            if (e.key === "Tab" && !e.shiftKey &&
-
-                // and no highlight detected
-                textarea1.selectionStart == textarea1.selectionEnd) {
-
-                // suspend default behaviour
-                e.preventDefault();
-
-                // Get the current cursor position
-                let cursorPosition = textarea1.selectionStart;
-
-                // Insert 4 white spaces at the cursor position
-                let newValue = textarea1.value.substring(0, cursorPosition) + "    " +
-                    textarea1.value.substring(cursorPosition);
-
-                // Update the textarea value and cursor position
-                textarea1.value = newValue;
-                textarea1.selectionStart = cursorPosition + 4;
-                textarea1.selectionEnd = cursorPosition + 4;
-
-                // copy the code from textarea to code block      
-                updateCode();
-                return;
-            }
-
-            // [Tab] and [Shift] keypress presence
-            if (e.key === "Tab" && e.shiftKey &&
-
-                // no highlight detected
-                textarea1.selectionStart == textarea1.selectionEnd) {
-
-                // suspend default behaviour
-                e.preventDefault();
-
-                // Get the current cursor position
-                let cursorPosition = textarea1.selectionStart;
-
-                // Check the previous characters for spaces
-                let leadingSpaces = 0;
-                for (let i = 0; i < 4; i++) {
-                    if (textarea1.value[cursorPosition - i - 1] === " ") {
-                        leadingSpaces++;
-                    } else {
-                        break;
-                    }
-                }
-
-                if (leadingSpaces > 0) {
-                    // Remove the spaces
-                    let newValue = textarea1.value.substring(0, cursorPosition - leadingSpaces) +
-                        textarea1.value.substring(cursorPosition);
-
-                    // Update the textarea value and cursor position
-                    textarea1.value = newValue;
-                    textarea1.selectionStart = cursorPosition - leadingSpaces;
-                    textarea1.selectionEnd = cursorPosition - leadingSpaces;
-                }
-
-                // copy the code from textarea to code block
-                updateCode();
-                return;
-            }
-
-
-            // [Tab]/[Shift] presence and highlight detected
-            // multiline indentation
-            if (e.key == 'Tab') {
-                e.preventDefault();
-
-                // split the textarea content into lines
-                var lines = this.value.split('\n');
-
-                // find the start/end lines
-                var startPos = this.value.substring(0, this.selectionStart).split('\n').length - 1;
-                var endPos = this.value.substring(0, this.selectionEnd).split('\n').length - 1;
-
-                var spacesRemovedFirstLine = 0;
-                var spacesRemoved = 0;
-
-                // check shift key was pressed (this means we're un-indenting)
-                if (e.shiftKey) {
-                    // iterate over all lines
-                    for (var i = startPos; i <= endPos; i++) {
-                        // remove up to four spaces from the start of the line
-                        lines[i] = lines[i].replace(/^ {1,4}/, function (match) {
-                            if (i == startPos)
-                                spacesRemovedFirstLine = match.length;
-                            spacesRemoved += match.length;
-                            return '';
-                        });
-                    }
-                }
-                // no shift key, so we're indenting
-                else {
-                    // iterate over all lines
-                    for (var i = startPos; i <= endPos; i++) {
-                        // add a tab to the start of the line
-                        lines[i] = '    ' + lines[i]; // four spaces
-                    }
-                }
-
-                // remember the cursor position
-                var start = this.selectionStart;
-                var end = this.selectionEnd;
-
-                // put the modified lines back into the textarea
-                this.value = lines.join('\n');
-
-                this.selectionStart = e.shiftKey ? start - spacesRemovedFirstLine : start + 4;
-                this.selectionEnd = e.shiftKey ? end - spacesRemoved : end + 4 * (endPos - startPos + 1);
-
-                // copy the code from textarea to code block      
-                updateCode();
-                return;
-            }
-        });
-
+        
         function generatePDF_Ajax() {
 
             showLoading();
@@ -442,17 +316,21 @@
         }
 
         function loadDoc(filename) {
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', `/sample_html/${filename}.html`, true);
-            xhr.responseType = 'text';
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    let htmlText = xhr.responseText;
-                    textarea1.value = htmlText;
-                    updateCode();
-                }
-            };
-            xhr.send();
+            try {
+
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', `/sample_html/${filename}.html`, true);
+                xhr.responseType = 'text';
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        let htmlText = xhr.responseText;
+                        textarea1.value = htmlText;
+                        updateCode();
+                    }
+                };
+                xhr.send();
+            }
+            catch (err) { alert(err); }
         }
 
         function showLoading() {
@@ -466,28 +344,15 @@
             d.style.display = "none";
         }
 
-        function updateCode() {
-            let text = textarea1.value;
-            text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            codeBlock.innerHTML = text;
-            highlightJS();
+        function loadFirstSample() {
+            loadDoc("basic");
         }
 
-        function highlightJS() {
-            document.querySelectorAll('pre code').forEach((el) => {
-                hljs.highlightElement(el);
-            });
-        }
+        setTimeout(loadFirstSample, 250);
 
-        textarea1.addEventListener("scroll", () => {
-            codeBlock.scrollTop = textarea1.scrollTop;
-            codeBlock.scrollLeft = textarea1.scrollLeft;
-        });
+        // applying shortcut keys
+        bindCodeEditorShortcutKeys(textarea1);
 
-
-        loadDoc("basic");
-
-        setTimeout(updateCode, 500);
     </script>
 </body>
 </html>
